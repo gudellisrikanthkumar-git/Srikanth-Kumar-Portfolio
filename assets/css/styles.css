@@ -114,3 +114,63 @@ body{overflow-x:hidden}
 	.project{min-height:0}
 	.project-summary{max-width:none}
 }
+
+/* HR-focused enhancements */
+.header-cta{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;background:var(--ink);color:#f5f1e9;text-decoration:none;font:500 11px 'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase}
+.header-cta:hover{background:var(--accent)}
+.hero-hello{margin:18px 0 -8px;font:500 18px 'Space Grotesk',sans-serif;color:var(--muted)}
+.hero-hello strong{color:var(--ink)}
+.button-outline{border:1px solid var(--ink);color:var(--ink);padding:15px 19px}
+.button-outline:hover{background:var(--ink);color:#f5f1e9}
+.button-bright{background:var(--accent);color:#fff}
+.button-bright:hover{background:#f5f1e9;color:var(--ink)}
+.button-ghost{border:1px solid #46615b;color:#f5f1e9;padding:15px 19px}
+.button-ghost:hover{border-color:#f5f1e9}
+.impact-strip{grid-template-columns:1.4fr repeat(4,1fr)}
+.mini-heading{margin:34px 0 14px;font:500 11px 'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.check-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.check-list li{position:relative;padding-left:26px;color:var(--ink);font-size:14px;line-height:1.5}
+.check-list li:before{content:"\2713";position:absolute;left:0;top:0;color:var(--accent);font-weight:800}
+.work-section .project:hover{background:#203b38}
+.project-meta{flex-wrap:wrap;gap:6px 16px}
+.project-meta span:last-child{color:#769189}
+.project-cta{background:#1d3533}
+.project-cta h3{font-size:clamp(24px,2.4vw,32px)}
+.cta-links{display:flex;align-items:center;flex-wrap:wrap;gap:24px;margin-top:auto}
+.cta-links .text-link{color:#f5f1e9}
+.skills-grid{grid-template-columns:.8fr 1.2fr}
+.skill-columns{grid-template-columns:repeat(4,1fr)}
+.skill-group ul{list-style:none;margin:0;padding:0;font-size:13px;line-height:2;color:var(--muted)}
+.education-section{padding:20px 0 120px}
+.education-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;margin-top:48px}
+.education-grid h3{font:500 clamp(22px,2.4vw,30px)/1.15 'Space Grotesk';letter-spacing:-.02em;margin:8px 0 10px}
+.education-grid p{margin:0;color:var(--muted)}
+.education-grid .eyebrow{color:var(--accent)}
+.contact-section{background:var(--ink);color:#f5f1e9;padding:120px 0 110px}
+.contact-inner h2{margin-bottom:28px}
+.light-text{color:#b8c2b6}
+.contact-email{display:inline-block;margin-bottom:56px;color:#f5f1e9;font:500 clamp(18px,2.2vw,26px) 'Space Grotesk';text-decoration:none;border-bottom:1px solid #46615b;padding-bottom:6px;word-break:break-all}
+.contact-email:hover{color:var(--accent);border-color:var(--accent)}
+.contact-actions{display:flex;flex-wrap:wrap;gap:16px}
+.contact-section .social-links a{color:#f5f1e9}
+.contact-section .social-links a:hover{color:var(--accent)}
+.site-footer{margin-top:0}
+@media(max-width:1000px){
+	.skill-columns{grid-template-columns:repeat(2,1fr);row-gap:36px}
+	.impact-strip{grid-template-columns:repeat(4,1fr)}
+	.impact-label{grid-column:1/-1}
+}
+@media(max-width:760px){
+	.header-cta{padding:8px 12px;font-size:10px}
+	.brand span:last-child{display:none}
+	.hero-hello{font-size:16px}
+	.impact-strip{grid-template-columns:1fr 1fr}
+	.skill-columns{grid-template-columns:1fr 1fr;margin-top:48px}
+	.skill-group ul{font-size:12px}
+	.education-section{padding:0 0 85px}
+	.education-grid{grid-template-columns:1fr;gap:36px;margin-top:36px}
+	.contact-section{padding:85px 0 80px}
+	.contact-inner h2{margin-bottom:24px}
+	.contact-email{margin-bottom:36px}
+	.contact-actions{flex-direction:column;align-items:flex-start}
+}
