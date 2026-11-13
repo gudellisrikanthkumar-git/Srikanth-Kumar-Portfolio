@@ -174,3 +174,17 @@ body{overflow-x:hidden}
 	.contact-email{margin-bottom:36px}
 	.contact-actions{flex-direction:column;align-items:flex-start}
 }
+
+/* Featured current project */
+.project-featured{grid-column:1/-1;min-height:0;background:#1d3533}
+.project-featured h3{max-width:none;font-size:clamp(30px,3.4vw,48px)}
+.project-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#46615b;border:1px solid #46615b;margin:4px 0 26px}
+.project-stats div{background:#172b2a;padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+.project-stats strong{font:600 clamp(26px,2.6vw,36px)/1 'Space Grotesk';color:#e75b3d;letter-spacing:-.03em}
+.project-stats span{font:500 10px/1.4 'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;color:#a5b3aa}
+.project-summary.project-summary-wide{max-width:none;grid-template-columns:repeat(3,1fr);gap:28px}
+.project-summary-wide p{max-width:none}
+@media(max-width:760px){
+	.project-stats{grid-template-columns:1fr 1fr}
+	.project-summary.project-summary-wide{grid-template-columns:1fr;gap:9px}
+}
