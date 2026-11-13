@@ -127,17 +127,25 @@ const ring = document.querySelector('.cursor-ring');
 if (ring && finePointer && !reduceMotion) {
   root.classList.add('has-cursor');
   let mx = -100, my = -100, rx = -100, ry = -100;
-  addEventListener('mousemove', (e) => { mx = e.clientX; my = e.clientY; ring.classList.add('is-active'); }, { passive: true });
+  addEventListener('mousemove', (e) => {
+    mx = e.clientX; my = e.clientY;
+    if (!ring.classList.contains('is-active')) { rx = mx; ry = my; }
+    ring.classList.add('is-active');
+  }, { passive: true });
   document.addEventListener('mouseleave', () => ring.classList.remove('is-active'));
   document.querySelectorAll('a, button').forEach((el) => {
     el.addEventListener('mouseenter', () => ring.classList.add('is-hover'));
     el.addEventListener('mouseleave', () => ring.classList.remove('is-hover'));
   });
-  const follow = () => {
-    rx += (mx - rx) * 0.2;
-    ry += (my - ry) * 0.2;
-    ring.style.transform = `translate(${rx}px, ${ry}px)`;
+  let last = performance.now();
+  const follow = (now) => {
+    // Frame-rate independent easing: ~55% of the gap per 60fps frame
+    const t = 1 - Math.pow(0.45, (now - last) / 16.67);
+    last = now;
+    rx += (mx - rx) * t;
+    ry += (my - ry) * t;
+    ring.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
     requestAnimationFrame(follow);
   };
-  follow();
+  requestAnimationFrame(follow);
 }

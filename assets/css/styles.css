@@ -246,7 +246,7 @@ body{overflow-x:hidden}
 .hero-visual:hover:before{opacity:1}
 
 /* Cursor follower */
-.cursor-ring{position:fixed;left:-17px;top:-17px;width:34px;height:34px;border:1.5px solid var(--accent);border-radius:50%;pointer-events:none;z-index:100;opacity:0;transition:opacity .25s ease,width .25s ease,height .25s ease,left .25s ease,top .25s ease,background-color .25s ease}
+.cursor-ring{position:fixed;left:-17px;top:-17px;width:34px;height:34px;border:1.5px solid var(--accent);border-radius:50%;pointer-events:none;z-index:100;opacity:0;will-change:transform;transition:opacity .25s ease,width .25s ease,height .25s ease,left .25s ease,top .25s ease,background-color .25s ease}
 .cursor-ring.is-active{opacity:.8}
 .cursor-ring.is-hover{width:56px;height:56px;left:-28px;top:-28px;background:rgba(231,91,61,.12)}
 
