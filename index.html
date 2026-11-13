@@ -17,7 +17,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="assets/css/styles.css?v=4" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=7" />
+  <script>try{var t=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.dataset.theme=t;document.documentElement.classList.add('js')}catch(e){}</script>
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -26,7 +27,8 @@
     <nav class="main-nav" aria-label="Main navigation">
       <a href="#about">About</a><a href="#work">Projects</a><a href="#skills">Skills</a><a href="#experience">Experience</a><a href="#contact">Contact</a>
     </nav>
-    <a class="header-cta" href="assets/resume/Gudelli_Srikanth_Kumar_Resume.pdf" target="_blank" rel="noreferrer">Resume <span>↓</span></a>
+    <div class="header-actions"><button class="theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-moon" aria-hidden="true">☾</span><span class="icon-sun" aria-hidden="true">☀</span></button><a class="header-cta" href="assets/resume/Gudelli_Srikanth_Kumar_Resume.pdf" target="_blank" rel="noreferrer">Resume <span>↓</span></a></div>
+    <div class="scroll-progress" aria-hidden="true"></div>
   </header>
 
   <main id="top">
@@ -35,7 +37,7 @@
         <p class="eyebrow"><span class="status-dot"></span> Open to Senior QA / SDET roles · India · Remote / Hybrid</p>
         <p class="hero-hello">Hi, I'm <strong>Gudelli Srikanth Kumar</strong></p>
         <h1>Quality is a<br><em>team sport.</em></h1>
-        <p class="hero-role">QA Automation Engineer · Playwright-BDD · TypeScript · Selenium · Java · AI-assisted testing</p>
+        <p class="hero-role">QA Automation Engineer · <span class="typed" data-words="Playwright-BDD + TypeScript|AI-assisted testing|Selenium + Java|Data-driven automation|API testing">Playwright-BDD + TypeScript</span><span class="typed-caret" aria-hidden="true"></span></p>
         <p class="hero-lede">6+ years building reliable test systems for claims, insurance, and healthcare platforms, from 900+ scenario Playwright suites to AI agents that write and heal tests.</p>
         <div class="hero-actions">
           <a class="button button-dark" href="assets/resume/Gudelli_Srikanth_Kumar_Resume.pdf" target="_blank" rel="noreferrer">Download resume <span>↓</span></a>
@@ -79,6 +81,7 @@
             <article class="project project-featured"><div class="project-index">01 / 04</div><div class="project-body"><div class="project-meta"><span>CLAIMS ADMINISTRATION · EPIQ · CURRENT</span><span>PLAYWRIGHT-BDD · TYPESCRIPT</span></div><h3>TCC – QCAP &amp; PCC Claims Processing Automation</h3>
               <div class="project-stats"><div><strong>926</strong><span>Scenarios from 9 feature files</span></div><div><strong>96%</strong><span>First-attempt pass rate</span></div><div><strong>3</strong><span>Parallel workers, stable</span></div><div><strong>150+ hrs</strong><span>Manual regression saved per cycle</span></div></div>
               <div class="project-summary project-summary-wide"><p><strong>Challenge</strong> Question-driven claim workflows across Initial Processing, Legal Rep, Deficiency Queue, and Send to PM, with claims that had to be prepared and regressed by hand.</p><p><strong>Approach</strong> Built a Playwright-BDD framework from scratch in TypeScript. It uses data-driven question-matrix feature files (Scenario Outlines with Excel data), shared page objects and step modules, DB reset scripts, and a cross-worker lock for collision-free parallel runs. AI agents generate test cases and scripts and heal failing tests through MCP Playwright.</p><p><strong>Result</strong> 7 user stories automated with 94–100% suite pass rates. 72 of 74 defect codes matched the business rules. Consolidated HTML reports and an Excel evidence workbook give stakeholders traceability by tracking number, status, and defect code.</p></div>
+              <div class="terminal" aria-label="Sample regression run summary"><div class="terminal-bar"><i></i><i></i><i></i><span>regression · 3 workers</span></div><pre class="terminal-body"><code><span class="t-line t-cmd">$ npx bddgen &amp;&amp; npx playwright test --workers=3</span><span class="t-line"><b>✓</b> QCAP Initial Processing     <em>298/311</em></span><span class="t-line"><b>✓</b> QCAP Legal Rep Deceased     <em>125/126</em></span><span class="t-line"><b>✓</b> Deficiency Queue            <em>15/15</em></span><span class="t-line"><b>✓</b> QCAP Send to PM             <em>3/3</em></span><span class="t-line"><b>✓</b> PCC Initial Processing      <em>100%</em></span><span class="t-line"><b>✓</b> PCC Legal Rep               <em>94%</em></span><span class="t-line t-done">926 scenarios · HTML report + Excel evidence exported</span></code></pre></div>
               <div class="tags"><span>PLAYWRIGHT-BDD</span><span>TYPESCRIPT</span><span>MCP PLAYWRIGHT</span><span>AI AGENTS</span><span>DATA-DRIVEN</span><span>SQL</span><span>PARALLEL RUNS</span></div></div></article>
             <article class="project"><div class="project-index">02 / 04</div><div class="project-body"><div class="project-meta"><span>INSURANCE · HEALTHCARE</span><span>TEAM OF 6</span></div><h3>CSB – CIGNA Supplemental Benefits</h3><div class="project-summary"><p><strong>Challenge</strong> Medicare enrollment across Cancer, Heart, Critical Illness, and Dental products.</p><p><strong>Approach</strong> Manual and automated UI, integration, and regression testing with data-driven Selenium/TestNG suites.</p><p><strong>Result</strong> Reduced testing time and increased coverage across multiple product lines.</p></div><div class="tags"><span>SELENIUM</span><span>JAVA</span><span>TESTNG</span><span>DATA-DRIVEN</span></div></div></article>
         <article class="project"><div class="project-index">03 / 04</div><div class="project-body"><div class="project-meta"><span>INSURANCE · AGENT PORTAL</span><span>TEAM OF 7</span></div><h3>FGI – Agent Virtual Office Portal</h3><div class="project-summary"><p><strong>Challenge</strong> Insurance quoting and policy issuance with workflow automation and multi-level privileges.</p><p><strong>Approach</strong> Smoke, functional, integration, and regression testing with BDD automation and full RTM traceability.</p><p><strong>Result</strong> Faster policy-issuance turnaround and safer releases to higher environments.</p></div><div class="tags"><span>SELENIUM</span><span>JAVA</span><span>CUCUMBER</span><span>SQL</span><span>MAVEN</span></div></div></article>
@@ -107,6 +110,7 @@
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Person","name":"Gudelli Srikanth Kumar","jobTitle":"QA Automation Engineer","worksFor":{"@type":"Organization","name":"Epiq"},"email":"mailto:Gudellisrikanthkumar@gmail.com","url":"https://gudellisrikanthkumar-git.github.io/Srikanth-Kumar-Portfolio/","image":"https://gudellisrikanthkumar-git.github.io/Srikanth-Kumar-Portfolio/assets/images/Profile.jpg.jpg","sameAs":["https://www.linkedin.com/in/srikanth-kumar-gudelli-6a8a25338","https://github.com/gudellisrikanthkumar-git"],"knowsAbout":["Test Automation","Playwright-BDD","Playwright","TypeScript","Selenium WebDriver","Java","AI-assisted testing","TestNG","Cucumber","API Testing","SQL","CI/CD","Agile"],"alumniOf":{"@type":"CollegeOrUniversity","name":"CMR College of Engineering and Technology"}}
   </script>
-  <script src="assets/js/script.js?v=4"></script>
+  <div class="cursor-ring" aria-hidden="true"></div>
+  <script src="assets/js/script.js?v=7"></script>
 </body>
 </html>
