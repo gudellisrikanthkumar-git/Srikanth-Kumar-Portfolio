@@ -77,3 +77,15 @@ Pharmaceutical pricing platform managing complex agreements across GPOs and heal
 **Portfolio:** [gudellisrikanthkumar-git.github.io/Srikanth-Kumar-Portfolio](https://gudellisrikanthkumar-git.github.io/Srikanth-Kumar-Portfolio/)
 
 *Automating the routine, investigating the unexpected, and finding bugs before users do.* 🐞
+
+## Password-protected resume
+
+The resume is published only as an encrypted file (`assets/resume/resume.enc`, AES-256-GCM, PBKDF2-SHA256 600k iterations) and decrypted in the browser after the visitor enters the password. The plain PDF and resume data files are git-ignored and stay local.
+
+To update the resume or change the password, place the new PDF at `assets/resume/Gudelli_Srikanth_Kumar_Resume.pdf`, then run:
+
+```powershell
+$env:RESUME_PASSWORD = "<new password>"; node scripts/encrypt_resume.mjs; Remove-Item Env:RESUME_PASSWORD
+```
+
+Commit and push the regenerated `assets/resume/resume.enc`.

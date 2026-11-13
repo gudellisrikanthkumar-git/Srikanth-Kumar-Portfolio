@@ -4,3 +4,10 @@ organized-portfolio-final.png
 __pycache__/
 *.pyc
 java-tools/target/
+
+# Private resume data: kept locally only, never published
+assets/resume/*.pdf
+data/
+docs/RESUME_EXTRACTION.md
+scripts/generate_portfolio_data.py
+scripts/extract_structured_data.py

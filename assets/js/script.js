@@ -149,3 +149,73 @@ if (ring && finePointer && !reduceMotion) {
   };
   requestAnimationFrame(follow);
 }
+// Password-locked resume: decrypts assets/resume/resume.enc in the browser.
+// Format and key derivation must match scripts/encrypt_resume.mjs.
+const resumeDialog = document.querySelector('.resume-dialog');
+if (resumeDialog) {
+  const form = resumeDialog.querySelector('.resume-form');
+  const input = resumeDialog.querySelector('#resume-password');
+  const error = resumeDialog.querySelector('.resume-error');
+  const submit = resumeDialog.querySelector('.resume-submit');
+  let encrypted = null;
+  let resumeUrl = null;
+
+  const downloadResume = (url) => {
+    Object.assign(document.createElement('a'), { href: url, download: 'Gudelli_Srikanth_Kumar_Resume.pdf' }).click();
+  };
+  const openResume = (url, win = window.open(url, '_blank')) => {
+    if (!win) downloadResume(url);
+  };
+
+  document.querySelectorAll('[data-resume]').forEach((trigger) => {
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (resumeUrl) { openResume(resumeUrl); return; }
+      error.textContent = '';
+      input.value = '';
+      resumeDialog.showModal();
+      input.focus();
+    });
+  });
+
+  resumeDialog.querySelector('.resume-close').addEventListener('click', () => resumeDialog.close());
+  resumeDialog.addEventListener('click', (e) => { if (e.target === resumeDialog) resumeDialog.close(); });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!input.value) { error.textContent = 'Please enter the password.'; return; }
+    submit.disabled = true;
+    error.textContent = 'Unlocking…';
+    // Open the tab during the click so pop-up blockers allow it; fill it once decrypted.
+    const tab = window.open('', '_blank');
+    try {
+      if (!encrypted) {
+        const res = await fetch('assets/resume/resume.enc', { cache: 'no-cache' });
+        if (!res.ok) throw new Error('missing');
+        encrypted = new Uint8Array(await res.arrayBuffer());
+      }
+      const salt = encrypted.slice(0, 16);
+      const iv = encrypted.slice(16, 28);
+      const baseKey = await crypto.subtle.importKey('raw', new TextEncoder().encode(input.value), 'PBKDF2', false, ['deriveKey']);
+      const key = await crypto.subtle.deriveKey(
+        { name: 'PBKDF2', salt, iterations: 600000, hash: 'SHA-256' },
+        baseKey,
+        { name: 'AES-GCM', length: 256 },
+        false,
+        ['decrypt']
+      );
+      const pdf = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, encrypted.slice(28));
+      resumeUrl = URL.createObjectURL(new Blob([pdf], { type: 'application/pdf' }));
+      resumeDialog.close();
+      if (tab) tab.location.href = resumeUrl; else downloadResume(resumeUrl);
+    } catch (err) {
+      tab?.close();
+      error.textContent = err.message === 'missing'
+        ? 'Resume is unavailable right now. Please request it by email.'
+        : 'Incorrect password. Please try again.';
+      input.select();
+    } finally {
+      submit.disabled = false;
+    }
+  });
+}
