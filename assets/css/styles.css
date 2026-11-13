@@ -189,7 +189,8 @@ body{overflow-x:hidden}
 	.project-summary.project-summary-wide{grid-template-columns:1fr;gap:9px}
 }
 /* ===== Visual effects ===== */
-.site-header{position:sticky;top:0;z-index:50;background:var(--paper);box-shadow:0 0 0 100vmax var(--paper);clip-path:inset(0 -100vmax -4px);transition:background-color .3s ease,box-shadow .3s ease}
+.site-header{position:sticky;top:0;z-index:50;background:var(--paper);transition:background-color .3s ease}
+.site-header:before{content:"";position:absolute;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);background:inherit;z-index:-1;pointer-events:none}
 .header-actions{display:flex;align-items:center;gap:12px}
 .theme-toggle{display:grid;place-items:center;width:36px;height:36px;border:1px solid var(--line);border-radius:50%;background:transparent;color:var(--ink);cursor:pointer;font-size:16px;transition:transform .3s ease,border-color .2s ease}
 .theme-toggle:hover{border-color:var(--accent);transform:rotate(20deg)}
@@ -314,3 +315,12 @@ body,.site-header,.experience-section,.work-section,.contact-section,.project{tr
 .resume-close:hover{color:var(--accent)}
 [data-theme="dark"] .resume-dialog{box-shadow:16px 16px 0 rgba(0,0,0,.4)}
 [data-theme="dark"] .resume-error{color:#ff8a6e}
+/* Scroll performance */
+.grain{background-size:180px 180px;will-change:transform;transform:translateZ(0);contain:strict}
+.site-header,.scroll-progress{will-change:transform}
+.scroll-progress{backface-visibility:hidden}
+/* Lenis smooth scrolling */
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}
+.lenis.lenis-stopped{overflow:hidden}

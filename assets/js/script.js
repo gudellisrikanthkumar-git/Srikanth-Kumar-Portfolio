@@ -13,14 +13,26 @@ if (!root.dataset.theme) root.dataset.theme = 'light';
 themeToggle?.setAttribute('aria-pressed', String(root.dataset.theme === 'dark'));
 themeToggle?.addEventListener('click', () => setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark'));
 
+// Smooth wheel scrolling (Lenis). Touch devices keep native scrolling.
+const lenis = !reduceMotion && window.Lenis
+  ? new Lenis({ autoRaf: true, lerp: 0.12, wheelMultiplier: 1, smoothWheel: true, anchors: true, stopInertiaOnNavigate: true })
+  : null;
+
 // Scroll progress + active nav link
 const progress = document.querySelector('.scroll-progress');
+let progressQueued = false;
 const updateProgress = () => {
+  progressQueued = false;
   const max = document.documentElement.scrollHeight - innerHeight;
   progress.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
 };
-addEventListener('scroll', updateProgress, { passive: true });
-addEventListener('resize', updateProgress);
+const queueProgress = () => {
+  if (progressQueued) return;
+  progressQueued = true;
+  requestAnimationFrame(updateProgress);
+};
+addEventListener('scroll', queueProgress, { passive: true });
+addEventListener('resize', queueProgress, { passive: true });
 updateProgress();
 
 const navLinks = [...document.querySelectorAll('.main-nav a[href^="#"]')];
@@ -111,15 +123,20 @@ if (typed && !reduceMotion) {
 const visual = document.querySelector('.hero-visual');
 if (visual && finePointer && !reduceMotion) {
   visual.addEventListener('animationend', () => { visual.style.animation = 'none'; }, { once: true });
+  let tiltFrame = 0;
   visual.addEventListener('mousemove', (e) => {
-    const r = visual.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - 0.5;
-    const y = (e.clientY - r.top) / r.height - 0.5;
-    visual.style.transform = `perspective(900px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg)`;
-    visual.style.setProperty('--shine-x', `${(x + 0.5) * 100}%`);
-    visual.style.setProperty('--shine-y', `${(y + 0.5) * 100}%`);
-  });
-  visual.addEventListener('mouseleave', () => { visual.style.transform = ''; });
+    if (tiltFrame) return;
+    tiltFrame = requestAnimationFrame(() => {
+      tiltFrame = 0;
+      const r = visual.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      visual.style.transform = `perspective(900px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg)`;
+      visual.style.setProperty('--shine-x', `${(x + 0.5) * 100}%`);
+      visual.style.setProperty('--shine-y', `${(y + 0.5) * 100}%`);
+    });
+  }, { passive: true });
+  visual.addEventListener('mouseleave', () => { cancelAnimationFrame(tiltFrame); tiltFrame = 0; visual.style.transform = ''; });
 }
 
 // Cursor follower (desktop only)
@@ -127,27 +144,30 @@ const ring = document.querySelector('.cursor-ring');
 if (ring && finePointer && !reduceMotion) {
   root.classList.add('has-cursor');
   let mx = -100, my = -100, rx = -100, ry = -100;
+  let last = 0;
+  let running = false;
+  const follow = (now) => {
+    // Frame-rate independent easing: ~55% of the gap per 60fps frame
+    const t = last ? 1 - Math.pow(0.45, (now - last) / 16.67) : 1;
+    last = now;
+    rx += (mx - rx) * t;
+    ry += (my - ry) * t;
+    ring.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
+    // Idle when caught up so nothing runs while the mouse is still
+    if (Math.abs(mx - rx) < 0.1 && Math.abs(my - ry) < 0.1) { running = false; last = 0; return; }
+    requestAnimationFrame(follow);
+  };
   addEventListener('mousemove', (e) => {
     mx = e.clientX; my = e.clientY;
     if (!ring.classList.contains('is-active')) { rx = mx; ry = my; }
     ring.classList.add('is-active');
+    if (!running) { running = true; requestAnimationFrame(follow); }
   }, { passive: true });
   document.addEventListener('mouseleave', () => ring.classList.remove('is-active'));
   document.querySelectorAll('a, button').forEach((el) => {
     el.addEventListener('mouseenter', () => ring.classList.add('is-hover'));
     el.addEventListener('mouseleave', () => ring.classList.remove('is-hover'));
   });
-  let last = performance.now();
-  const follow = (now) => {
-    // Frame-rate independent easing: ~55% of the gap per 60fps frame
-    const t = 1 - Math.pow(0.45, (now - last) / 16.67);
-    last = now;
-    rx += (mx - rx) * t;
-    ry += (my - ry) * t;
-    ring.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
-    requestAnimationFrame(follow);
-  };
-  requestAnimationFrame(follow);
 }
 // Password-locked resume: decrypts assets/resume/resume.enc in the browser.
 // Format and key derivation must match scripts/encrypt_resume.mjs.
@@ -174,10 +194,12 @@ if (resumeDialog) {
       error.textContent = '';
       input.value = '';
       resumeDialog.showModal();
+      lenis?.stop();
       input.focus();
     });
   });
 
+  resumeDialog.addEventListener('close', () => lenis?.start());
   resumeDialog.querySelector('.resume-close').addEventListener('click', () => resumeDialog.close());
   resumeDialog.addEventListener('click', (e) => { if (e.target === resumeDialog) resumeDialog.close(); });
 
